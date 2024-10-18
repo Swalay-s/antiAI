@@ -110,38 +110,50 @@ export default function Home() {
           </div>
         </nav>
       </header>
-      
-      <main className="container mx-auto px-4 pt-24 relative z-10">
-        <section id="home" className="py-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-3xl mx-auto text-center"
-          >
-            
-            <img 
-            
-                  src={theme === 'dark' ? "/images/logo_dark.png" : "/images/logo_white.png"}
-             style={{ display: 'block', margin: 'auto' }} 
-            alt="Logo" 
-             />
 
-                
-            <p className="text-2xl font-black mb-4">Using AI to stop AI.</p>
-            <p className={`text-lg ${theme === 'dark' ? 'text-white' : 'text-black'} mb-8`}>
-              Protecting user media from AI exploitation through content immunization and accurate AI detection, 
-              ensuring your digital assets remain secure and authentic on social media.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-                <Link href="/Protect">
-                <Button variant="outline" className="w-36 hover:bg-neutral-500">Protect</Button>
-                </Link>
-                <Link href="/Detect">
-              <Button variant="outline" className="w-36 hover:bg-neutral-500" >Detect</Button></Link>
-            </div>
-          </motion.div>
-        </section>
+      <main className="container mx-auto px-4 pt-24 relative z-10">
+  <section id="home" className="py-20">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 2 }} // Set your desired duration
+      className="max-w-3xl mx-auto text-center"
+    >
+      <img 
+        src={theme === 'dark' ? "/images/logo_dark.png" : "/images/logo_white.png"}
+        style={{ display: 'block', margin: 'auto' }} 
+        alt="Logo" 
+      />
+
+      <motion.p
+        initial={{ opacity: 0, x: 20 }} // Start from right
+        animate={{ opacity: 1, x: 0 }}   // Move to original position
+        transition={{ duration: 0.5 }}     // Adjust duration as needed
+        className="text-2xl font-black mb-4"
+      >
+        Using AI to stop AI.
+      </motion.p>
+
+      <motion.p
+        initial={{ opacity: 0, x: 20 }} // Start from right
+        animate={{ opacity: 1, x: 0 }}   // Move to original position
+        transition={{ duration: 0.5 }}     // Adjust duration as needed
+        className={`text-lg ${theme === 'dark' ? 'text-white' : 'text-black'} mb-8`}
+      >
+        Protecting user media from AI exploitation through content immunization and accurate AI detection, 
+        ensuring your digital assets remain secure and authentic on social media.
+      </motion.p>
+
+      <div className="flex flex-wrap justify-center gap-4">
+        <Link href="/Protect">
+          <Button variant="outline" className="w-36 hover:bg-neutral-500">Protect</Button>
+        </Link>
+        <Link href="/Detect">
+          <Button variant="outline" className="w-36 hover:bg-neutral-500">Detect</Button>
+        </Link>
+      </div>
+    </motion.div>
+  </section>
 
         <section className="py-20">
           <motion.div
