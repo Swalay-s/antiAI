@@ -52,13 +52,13 @@ export default function DetectPage() {
     try {
       let response;
       if (file.type.startsWith("image/")) {
-        response = await axios.post("https://jubilant-succotash-wq5r54pjggxcg7r9-5000.app.github.dev/detect_image", formData)
+        response = await axios.post("http://127.0.0.1:5000/detect_image", formData)
       } else if (file.type.startsWith("audio/")) {
-        response = await axios.post("https://jubilant-succotash-wq5r54pjggxcg7r9-5000.app.github.dev/detect_audio", formData)
+        response = await axios.post("http://127.0.0.1:5000/detect_audio", formData)
       } else if (file.type.startsWith("video/")) {
-        response = await axios.post("https://jubilant-succotash-wq5r54pjggxcg7r9-5000.app.github.dev/detect_video", formData)
+        response = await axios.post("http://127.0.0.1:5000/detect_video", formData)
       } else {
-        response = await axios.post("https://7t6qwzmb-5000.inc1.devtunnels.ms/detect", formData)
+        response = await axios.post("http://127.0.0.1:5000/detect", formData)
       }
       setResult(response.data)
     } catch (error) {
@@ -155,7 +155,7 @@ export default function DetectPage() {
 
       <footer className={`mt-12 py-8 ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'} translate-y-[60px]`}>
         <div className="container mx-auto px-4 text-center">
-          <p className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>&copy; 2024 guard.ai. All rights reserved.</p>
+          <p className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>&copy; 2024 roboguard. All rights reserved.</p>
         </div>
       </footer>
     </div>

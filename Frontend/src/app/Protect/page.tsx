@@ -62,11 +62,11 @@ export default function ProtectPage() {
         const base64 = await convertToBase64(file)
         const payload = JSON.stringify({ prompt: base64.split("base64,")[1] })
         const response = await axios.post(
-          "https://api.cortex.cerebrium.ai/v4/p-5df54339/image-protection/predict",
+          "https://api.cortex.cerebrium.ai/v4/p-5a666c8e/image-protection/predict",
           payload,
           {
             headers: {
-              Authorization:"Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm9qZWN0SWQiOiJwLTVkZjU0MzM5IiwiaWF0IjoxNzI2MjA4NzMzLCJleHAiOjIwNDE3ODQ3MzN9.SumfL0n6IbbaX5j7z4X1l7_w5QBWZnYYxImVcFf4QUlGFmZ3KYJoPY5GcEopAzY04TSb--zg3e_zFZSMxSBBW_Fu0jjQXaNg_MUshkLxPkj9uBPRoRzGMUeX7lzMG7VOKMUhtuKa7neJ7C2q8uVQtkLWNaF65Q4PWNSwa8g5XP8qLzbuL2pmmGZGYH7jVx1jkwoLHh792xuE_wP9DfLqCgDtxwiQH9xYsGTzO5idOecv_ARCSyNK6zAgleelm22UMl8u-LMRumsK8rfDN7KHrEoYxuW1LhikCq3NvWgR9SSGuVSli1RMuSU9bQJqPz8jhm_4r7gAcPBqrfxmqrZVvw",
+              Authorization:"Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm9qZWN0SWQiOiJwLTVhNjY2YzhlIiwiaWF0IjoxNzI5MjU0ODY4LCJleHAiOjIwNDQ4MzA4Njh9.AxnINa14s6iutFe7Jzyhpq64k5GXM1Pm2GhWAZVG_HX4-55RiVIN3X14NjAfoWvh53pGgqpqlhKwKji9sJwKUP-6RvUMUHxyzNdZo67LVRojmVN4QuU784XVlOLaf_5Verx4G43p4ptSERZMU5Trvbh_RVvS0aJHoi5IWhsfpGpfZNqdHOaFKtaWJkRU8vG3vRWP2J_Tos4mO-HJ37c_BYFeyWzlWZal5UfEcPc_OK-ln6bh8pbYnasAjz7Z_kJIvLtGujkc1R1YFzqGAri-IXPiLJ4jK72YKPq9Q_IBzPlfxOpJ4_7LY8Tm73VpvJn_iU4LwVK8etSutVtKg2cl3w",
         Accept: "application/json",
 
             },
@@ -199,7 +199,7 @@ export default function ProtectPage() {
 
       <footer className={`mt-12 py-8 ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'} translate-y-[60px]`}>
         <div className="container mx-auto px-4 text-center">
-            <p className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} `}>&copy; 2024 guard.ai. All rights reserved.</p>
+            <p className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} `}>&copy; 2024 roboguard. All rights reserved.</p>
         </div>
       </footer>
     </div>
