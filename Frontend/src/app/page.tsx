@@ -1,10 +1,9 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import React,{ useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '../Components/buttons'
 import { ChevronDown, Sun, Moon } from 'lucide-react'
 import Link from 'next/link'
-
 
 export default function Home() {
   const [showMore, setShowMore] = useState(false)
@@ -13,7 +12,7 @@ export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [shuffledImgs, setShuffledImgs] = useState<{ src: string; alt: string; answer: string; style: React.CSSProperties }[]>([])
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
-
+  
   const imgs = [
     { src: '/images/image1.jpg', alt: 'Game Image1', answer: 'Real' },
     { src: '/images/image2.jpg', alt: 'Game Image2', answer: 'Fake' },
@@ -72,27 +71,32 @@ export default function Home() {
     localStorage.setItem('theme', theme)
     document.body.className = theme
   }, [theme])
-
   const toggleTheme = () => {
     setTheme(prevTheme => prevTheme === 'dark' ? 'light' : 'dark')
   }
 
   const handleNext = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % shuffledImgs.length)
-    setAnswer('')
-  }
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % shuffledImgs.length);
+    setAnswer(''); // Clear answer for the next question
+  };
 
-  const handleSelect = (selectedAnswer: string) => {
-    setAnswer(selectedAnswer)
-    if (selectedAnswer === shuffledImgs[currentImageIndex].answer) {
-      alert('Correct!')
-    } else {
-      alert('Incorrect!')
-    }
-  }
-
+  const handleSelect = (selectedAnswer:string) => {
+    const isCorrect = selectedAnswer === shuffledImgs[currentImageIndex].answer;
+    setAnswer(isCorrect ? 'correct' : 'incorrect'); // Set answer to either 'correct' or 'incorrect'
+  };
+  const [isProtectHovered, setProtectHovered] = useState(false);
+  const [isDetectHovered, setDetectHovered] = useState(false);
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'bg-black text-white' : 'bg-white text-black'} overflow-hidden relative`}>
+    
+    <div 
+  className={`min-h-screen ${theme === 'dark' ? 'bg-black text-white' : 'bg-white text-black'} overflow-hidden relative`} 
+  style={{
+    backgroundImage: 'url("C:\Users\Hemanth\antiAI\Frontend\public\images\background.png")', // Change to your image path
+    backgroundSize: 'cover', // Cover the entire area
+    backgroundPosition: 'center', // Center the image
+    backgroundRepeat: 'no-repeat', // Prevent the image from repeating
+  }}
+>
       <header className={`fixed top-0 left-0 right-0 z-50 ${theme === 'dark' ? 'bg-black/50' : 'bg-white/50'} backdrop-blur-md transition-transform duration-300 ${showNavbar ? 'translate-y-0' : '-translate-y-full'}`}>
         <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
         <img 
@@ -102,8 +106,8 @@ export default function Home() {
           />
 
           <div className="flex space-x-6 items-center">
-            <Link href="#home" className="text-sm font-medium hover:text-blue-400 transition-colors">Home</Link>
-            <Link href="#playground" className="text-sm font-medium hover:text-blue-400 transition-colors">Playground</Link>
+            <Link href="#home" className="text-lg font-medium hover:text-blue-400 transition-colors">Home</Link>
+            <Link href="#playground" className="text-lg font-medium hover:text-blue-400 transition-colors">Playground</Link>
             <Button variant="ghost" onClick={toggleTheme} className="p-2">
               {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
@@ -113,30 +117,57 @@ export default function Home() {
 
       <main className="container mx-auto px-4 pt-24 relative z-10">
   <section id="home" className="py-20">
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 2 }} // Set your desired duration
-      className="max-w-3xl mx-auto text-center"
+  <motion.div
+      style={{
+        position: "relative",
+        width: "100vw",  // Full viewport width
+        height: "50vh", // Full viewport height
+        overflow: "hidden", // Ensures the image doesn't go out of bounds
+      }}
     >
-      <img 
-        src={theme === 'dark' ? "/images/logo_dark.png" : "/images/logo_white.png"}
-        style={{ display: 'block', margin: 'auto' }} 
-        alt="Logo" 
+      <motion.img
+      src={theme === 'dark' ? "/images/brain_transparent.png" : "/images/brain.png"}
+      alt="Your image"
+      style={{
+        position: "absolute",
+        top: "0",   // Align to the top
+        width: "600px",  // Set the image width
+        height:"50vh"
+      }}
+      initial={{ x: "0vw" }}  // Start off-screen on the right
+      animate={{ x: "50vw" }}  // Animate to the leftmost corner
+      transition={{ duration: 1 }}  // Set animation duration
+    />
+      <motion.img
+        src={theme === 'dark' ? "/images/LOGO.png" : "/images/logo_white.png"}
+        alt="Your image"
+        style={{
+          position: "absolute",
+          top: "0",   // Align to the top
+          width: "600px",  // Set the image width
+        }}
+        initial={{ x: "30vw" }}  // Start off-screen on the right
+        animate={{ x: 0 }}  // Animate to the leftmost corner
+        transition={{ duration: 1 }}  // Set animation duration
       />
-
-      <motion.p
-        initial={{ opacity: 0, x: 20 }} // Start from right
-        animate={{ opacity: 1, x: 0 }}   // Move to original position
+      
+    </motion.div>
+    <motion.p
+        initial={{ opacity: 0, x: 10 }} // Start from right
+        animate={{ opacity: 1, x: 50 }}   // Move to original position
         transition={{ duration: 0.5 }}     // Adjust duration as needed
-        className="text-2xl font-black mb-4"
+        className="text-2xl font-black mb-4" style={{ fontFamily: 'Poppins, sans-serif' }}
       >
-        Using AI to stop AI.
+        USING AI TO STOP AI.
       </motion.p>
 
       <motion.p
+          style={{
+            width: "100%",  // Full width (optional)
+            maxWidth: "600px",  // Limits the paragraph width to 600px
+            textAlign: "left",}}
         initial={{ opacity: 0, x: 20 }} // Start from right
-        animate={{ opacity: 1, x: 0 }}   // Move to original position
+        animate={{ opacity: 1, x: 50 }}   // Move to original position
         transition={{ duration: 0.5 }}     // Adjust duration as needed
         className={`text-lg ${theme === 'dark' ? 'text-white' : 'text-black'} mb-8`}
       >
@@ -144,126 +175,246 @@ export default function Home() {
         ensuring your digital assets remain secure and authentic on social media.
       </motion.p>
 
+      <motion.p 
+       initial={{ opacity: 0, x:50 }}  // Start fully transparent
+       animate={{ opacity: 1,y:100 }}  // Animate to fully visible
+       transition={{ duration: 1 }}  // Set duration of 2 seconds
+       style={{ //text-4xl font-extrabold text-center mb-10 text-gray-200
+         fontSize: "36px",
+         color: "#FFFFFF",  
+         fontFamily: 'Poppins, extrabold',// Text color
+         fontWeight:'800'
+       }}
+       >
+              OUR SERVICES:
+
+      </motion.p>
+
       <div className="flex flex-wrap justify-center gap-4">
+      {/* Protect Button with Dropdown */}
+      <div 
+        className="relative inline-block text-left" 
+        onMouseEnter={() => setProtectHovered(true)} 
+        onMouseLeave={() => setProtectHovered(false)}
+      >
         <Link href="/Protect">
-          <Button variant="outline" className="w-36 hover:bg-neutral-500">Protect</Button>
+        <AnimatePresence>
+          {isProtectHovered && (
+            <motion.div
+              initial={{ opacity: 0, y: 100, x: -200 }}
+              animate={{ opacity: 1, y: 190, x: -200 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="absolute left-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+            >
+              <div className="py-1">
+                <a
+                  href="#"
+                  className="block px-4 py-2 text-lg text-gray-700 hover:bg-gray-100"
+                >
+                  {"--> Feature goes beyond detection to actively protect content"}
+                </a>
+                <a
+                  href="#"
+                  className="block px-4 py-2 text-lg text-gray-700 hover:bg-gray-100"
+                >
+                 {"--> Necessary algorithms make the media resilient to deepfakes"}
+                </a>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+          <motion.button
+            initial={{ x: -500, opacity: 0 ,y:150}} // Start off-screen to the left
+            animate={{ x: -200, opacity: 1 ,y:150}} // Slide in from left
+            exit={{ x: -100, opacity: 0 }} // Slide out to the left
+            transition={{ duration: 0.5 }}
+            whileHover={{
+              scale: 1.2,
+              backgroundColor: "#FFFFFF",
+              color: "#000000",
+              borderColor: "#000000",
+            }}
+            whileTap={{
+              scale: 0.6,
+              borderColor: "#e74c3c",
+            }}
+            style={{
+              padding: "10px 100px",
+              fontSize: "16px",
+              backgroundColor: "#000000",
+              color: "#fff",
+              border: "2px solid",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+          >
+            Protect
+          </motion.button>
         </Link>
-        <Link href="/Detect">
-          <Button variant="outline" className="w-36 hover:bg-neutral-500">Detect</Button>
-        </Link>
+
+       
       </div>
-    </motion.div>
+
+      {/* Detect Button with Dropdown */}
+      <div 
+        className="relative inline-block text-left" 
+        onMouseEnter={() => setDetectHovered(true)} 
+        onMouseLeave={() => setDetectHovered(false)}
+      >
+        <Link href="/Detect">
+        <AnimatePresence>
+          {isDetectHovered && (
+            <motion.div
+              initial={{ opacity: 0, y: 100, x: 200 }}
+              animate={{ opacity: 1, y: 190, x: 200 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="absolute left-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+            >
+              <div className="py-1">
+                <a
+                  href="#"
+                  className="block px-4 py-2 text-lg text-gray-700 hover:bg-gray-100"
+                >
+                 {"--> AI-driven detection for deepfake media"}
+                </a>
+                <a
+                  href="#"
+                  className="block px-4 py-2 text-lg text-gray-700 hover:bg-gray-100"
+                >
+                  {"-->Continuous learning to detect evolving threats"}
+                </a>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+          <motion.button
+            initial={{ x: -500, opacity: 0 ,y:150}} // Start off-screen to the left
+            animate={{ x: 200, opacity: 1 ,y:150}} // Slide in from left
+            exit={{ x: -100, opacity: 0 }} // Slide out to the left
+            transition={{ duration: 0.5 }}
+            whileHover={{
+              scale: 1.2,
+              backgroundColor: "#FFFFFF",
+              color: "#000000",
+              borderColor: "#000000",
+            }}
+            whileTap={{
+              scale: 0.6,
+              borderColor: "#e74c3c",
+            }}
+            style={{
+              padding: "10px 100px",
+              fontSize: "16px",
+              backgroundColor: "#000000",
+              color: "#fff",
+              border: "2px solid",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+          >
+            Detect
+          </motion.button>
+        </Link>
+
+       
+      </div>
+    </div>  
   </section>
 
-        <section className="py-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="max-w-3xl mx-auto"
-          >
-            <h2 className="text-3xl font-bold mb-6 text-center">How It Works</h2>
-            <div className="grid gap-6 md:grid-cols-2">
-              <div className="bg-slate-400/50 backdrop-blur-sm p-6 rounded-lg">
-                <h3 className="text-xl font-black text-center mb-2">Content Immunization</h3>
-                <p className={`${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                  Our advanced algorithms apply subtle modifications to your media, making it resistant to AI exploitation 
-                  without affecting its visual quality.
-                </p>
-              </div>
-              <div className="bg-slate-400/50 backdrop-blur-sm p-6 rounded-lg">
-                <h3 className="text-xl font-black text-center mb-2">AI Detection</h3>
-                <p className={`${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                  Utilize cutting-edge AI detection techniques to identify potentially manipulated or AI-generated content 
-                  across various social media platforms.
-                </p>
-              </div>
-            </div>
-          </motion.div>
-        </section>
 
-        {showMore && (
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="py-20"
-          >
-            <div className="max-w-3xl mx-auto">
-              <h2 className="text-3xl font-bold mb-6 text-center">Why Choose roboguard?</h2>
-              <ul className={`list-disc list-inside ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} space-y-2`}>
-                <li>Cutting-edge AI technology for robust protection</li>
-                <li>User-friendly browser extension for seamless integration</li>
-                <li>Continuous updates to stay ahead of emerging AI threats</li>
-                <li>Privacy-focused approach with no data collection</li>
-                <li>Compatible with major social media platforms</li>
-              </ul>
-            </div>
-          </motion.section>
-        )}
+      <motion.section
+        initial={{ opacity: 0, y: 275 }}
+        animate={{ opacity: 1, y: 250 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="py-24 "
+      >
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="text-4xl font-extrabold text-center mb-10 text-gray-200">
+            Why Choose RoboGuard?
+          </h2>
 
-        <div className="text-center py-10">
-          <Button
-            variant="ghost"
-            onClick={() => setShowMore(!showMore)}
-            className="text-blue-400 hover:text-blue-300"
-          >
-            {showMore ? 'Show Less' : 'Show More'}
-            <ChevronDown className={`ml-2 h-4 w-4 transition-transform ${showMore ? 'rotate-180' : ''}`} />
-          </Button>
+          <ul className="space-y-8">
+            {[
+              "-->   Cutting-edge AI technology for robust protection",
+              "-->   User-friendly browser extension for seamless integration",
+              "-->   Continuous updates to stay ahead of emerging AI threats",
+              "-->   Privacy-focused approach with no data collection",
+              "-->   Compatible with major social media platforms",
+            ].map((item, index) => (
+              <motion.li
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.2 }}
+                className={`p-6 rounded-lg shadow-lg transform transition-transform hover:scale-105 ${
+                  theme === 'dark' ? 'bg-gray-600 text-gray-400' : 'bg-white text-gray-600'
+                }`}
+              >
+                {item}
+              </motion.li>
+            ))}
+          </ul>
         </div>
+      </motion.section>
+
+
 
         <motion.section id="playground" 
-          initial={{ opacity: 0 }} 
-          animate={{ opacity: 1 }} 
+          initial={{ opacity: 0 ,y:200}} 
+          animate={{ opacity: 1 ,y:200}} 
           transition={{ duration: 0.6 }}
-          className="py-20"
+          className="py-20 mb-40"
         >
-          <div className="flex flex-col justify-center items-center">
-            <motion.h2 className="text-5xl font-bold mb-8">Real or Fake?</motion.h2>
-            <motion.div className={`w-full max-w-md ${theme === 'dark' ? 'bg-slate-800 border-slate-600' : 'bg-slate-200 border-slate-300'} border-2 rounded-lg p-8 flex flex-col items-center`}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              {shuffledImgs.length > 0 && (
-                <img
-                  src={shuffledImgs[currentImageIndex].src}
-                  className="w-64 h-64 object-cover rounded-lg mb-6"
-                  alt={shuffledImgs[currentImageIndex].alt}
-                />
-              )}
-              <div className="flex space-x-4 mb-4">
-                <Button
-                  variant="outline"
-                  className="w-24 bg-green-500 hover:bg-green-600 text-white"
-                  onClick={() => handleSelect('Real')}
-                >
-                  Real
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-24 bg-red-500 hover:bg-red-600 text-white"
-                  onClick={() => handleSelect('Fake')}
-                >
-                  Fake
-                </Button>
-              </div>
-              {answer && (
-                <p className="text-2xl mb-4">You selected: {answer}</p>
-              )}
+        <div className="flex flex-col justify-center items-center">
+          <motion.h2 className="text-6xl font-bold mb-8">Real or AI generated?</motion.h2>
+          <motion.div className={`w-full max-w-xl ${theme === 'dark' ? 'bg-slate-800 border-slate-600' : 'bg-slate-200 border-slate-300'} border-2 rounded-lg p-10 flex flex-col items-center`}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            {shuffledImgs.length > 0 && (
+              <img
+                src={shuffledImgs[currentImageIndex].src}
+                className="w-full h-80 object-contain rounded-lg mb-8"
+                alt={shuffledImgs[currentImageIndex].alt}
+              />
+            )}
+            <div className="flex space-x-6 mb-6">
               <Button
-                className="w-full"
-                onClick={handleNext}
+                variant="outline"
+                className="w-28 bg-green-500 hover:bg-green-600 text-white"
+                onClick={() => handleSelect('Real')}
+                onClickCapture={() => handleNext()}
               >
-                Next
+                Real
               </Button>
-            </motion.div>
-          </div>
+              <Button
+                variant="outline"
+                className="w-28 bg-red-500 hover:bg-red-600 text-white"
+                onClick={() => handleSelect('Fake')}
+                onClickCapture={() => handleNext()}
+              >
+                AI
+              </Button>
+            </div >
+
+            {answer && (
+              <div className={`mt-6 text-xl ${answer === 'correct' ? 'text-green-500' : 'text-red-500'}`}>
+                {answer === 'correct' ? 'Correct Answer!' : 'Incorrect Answer, try again!'}
+              </div>
+            )}
+          </motion.div>
+        </div>
+
         </motion.section>
       </main>
 
-      <footer className={`${theme === 'dark' ? 'bg-gray-900/50' : 'bg-gray-100/50'} backdrop-blur-sm py-8 relative z-10`}>
+
+
+
+      <footer className={`${theme === 'dark' ? 'bg-gray-900/50' : 'bg-gray-100/50'}   py-8 relative z-10 `}>
         <div className="container mx-auto px-4 text-center text-gray-400">
           <p>&copy; 2024 roboguard. All rights reserved.</p>
         </div>

@@ -74,11 +74,15 @@ export default function DetectPage() {
       <header className={`fixed top-0 left-0 right-0 z-50 ${theme === 'dark' ? 'bg-black/50' : 'bg-white/50'} backdrop-blur-md transition-transform duration-300 ${showNavbar ? 'translate-y-0' : '-translate-y-full'}`}>
         <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
           <Link href="/">
-            <img src="/images/Logo.png" alt="guard.ai logo" className="h-8" />
+          <img 
+          src={theme === 'dark' ? "/images/RG_dark.png" : "/images/RG_white.png"} 
+          alt="roboguard logo" 
+          className="h-8" 
+          />
           </Link>
           <div className="flex space-x-6 items-center">
-            <Link href="/" className="text-sm font-medium hover:text-blue-400 transition-colors">Home</Link>
-            <Link href="/Protect" className="text-sm font-medium hover:text-blue-400 transition-colors">Protect</Link>
+            <Link href="/" className="text-lg font-medium hover:text-blue-400 transition-colors">Home</Link>
+            <Link href="/Protect" className="text-lg font-medium hover:text-blue-400 transition-colors">Protect</Link>
             <Button variant="ghost" onClick={toggleTheme} className="p-2">
               {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
@@ -155,7 +159,7 @@ export default function DetectPage() {
 
       <footer className={`mt-12 py-8 ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'} translate-y-[60px]`}>
         <div className="container mx-auto px-4 text-center">
-          <p className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>&copy; 2024 guard.ai. All rights reserved.</p>
+          <p className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>&copy; 2024 roboguard. All rights reserved.</p>
         </div>
       </footer>
     </div>
