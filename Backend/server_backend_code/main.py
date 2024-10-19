@@ -2,11 +2,12 @@ import base64
 import torch
 from diffusers import StableDiffusionPipeline, DPMSolverMultistepScheduler
 from PIL import Image
-import torch
 import numpy as np
 from tqdm import tqdm
 from io import BytesIO
-import torchvision.transforms as T # type: ignore
+import torchvision.transforms as T  # type: ignore
+import random
+
 # Specify the model to be loaded
 model_id = 'stabilityai/stable-diffusion-2-1'
 
@@ -27,26 +28,29 @@ def preprocess(image):
     image = image[None].transpose(0, 3, 1, 2)
     image = torch.from_numpy(image)
     return 2.0 * image - 1.0
+
 def model_run(b64_source):
     to_pil = T.ToPILImage()
-    model_id_or_path = "jcplus/stable-diffusion-v1-5"
 
     pipe_img2img = StableDiffusionPipeline.from_pretrained(
-    "botp/stable-diffusion-v1-5",
-    
-    torch_dtype=torch.float16,
-)
+        "botp/stable-diffusion-v1-5",
+        torch_dtype=torch.float16,
+    )
     pipe_img2img = pipe_img2img.to("cuda")
-    #with open("b64_source.txt","r") as x:
-    #    image_data=x.read()
-    image_data=b64_source
-    init_image=base64.b64decode(image_data)
+
+    image_data = b64_source
+    init_image = base64.b64decode(image_data)
     init_image = Image.open(BytesIO(init_image)).convert('RGB')
-    resize = T.transforms.Resize(512)
-    center_crop = T.transforms.CenterCrop(512)
+    resize = T.Resize(512)
+    center_crop = T.CenterCrop(512)
     init_image = center_crop(resize(init_image))
-    init_image
+
     def pgd(X, model, eps=0.1, step_size=0.015, iters=40, clamp_min=0, clamp_max=1, mask=None):
+        # Introduce slight randomization for eps, step_size, and iters
+        eps = random.uniform(0.025, 0.035)  # Randomize eps in range [0.025, 0.035]
+        step_size = random.uniform(0.015, 0.025)  # Randomize step_size in range [0.015, 0.025]
+        iters = random.randint(60, 80)  # Randomize iterations between 60 and 80
+
         X_adv = X.clone().detach() + (torch.rand(*X.shape)*2*eps-eps).cuda()
         pbar = tqdm(range(iters))
         for i in pbar:
@@ -69,16 +73,18 @@ def model_run(b64_source):
                 X_adv.data *= mask
                 
         return X_adv
+
     with torch.autocast('cuda'):
         X = preprocess(init_image).half().cuda()
-        adv_X = pgd(X, 
-                    model=pipe_img2img.vae.encode, 
-                    clamp_min=-1, 
-                    clamp_max=1,
-                    eps=0.03, # The higher, the less imperceptible the attack is 
-                    step_size=0.02, # Set smaller than eps
-                    iters=70, # The higher, the stronger your attack will be
-                )
+        adv_X = pgd(
+            X, 
+            model=pipe_img2img.vae.encode, 
+            clamp_min=-1, 
+            clamp_max=1,
+            eps=0.03,  # This will be randomized inside pgd
+            step_size=0.02,  # This will be randomized inside pgd
+            iters=70,  # This will be randomized inside pgd
+        )
         
         # convert pixels back to [0,1] range
         adv_X = (adv_X / 2 + 0.5).clamp(0, 1)
@@ -92,6 +98,7 @@ def model_run(b64_source):
 
     # Return the base64 encoded image
     return base64_adv_image
+
 def predict(prompt: str):
-    b64=model_run(prompt)
+    b64 = model_run(prompt)
     return b64

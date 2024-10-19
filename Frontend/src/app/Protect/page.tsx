@@ -129,7 +129,7 @@ export default function ProtectPage() {
       <header className={`fixed top-0 left-0 right-0 z-50 ${theme === 'dark' ? 'bg-black/50' : 'bg-white/50'} backdrop-blur-md transition-transform duration-300 ${showNavbar ? 'translate-y-0' : '-translate-y-full'}`}>
         <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
           <Link href="/">
-            <img src="/images/Logo.png" alt="guard.ai logo" className="h-8" />
+            <img src="/images/Logo.png" alt="roboguard logo" className="h-8" />
           </Link>
           <div className="flex space-x-6 items-center">
             <Link href="/" className="text-sm font-medium hover:text-blue-400 transition-colors">Home</Link>
