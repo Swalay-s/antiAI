@@ -128,3 +128,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+Backend/models/audio_classifier.h5
+Backend/models/face_recogniser.pt
+Backend/models/resnetinceptionv1_epoch_32.pth

@@ -52,13 +52,13 @@ export default function DetectPage() {
     try {
       let response;
       if (file.type.startsWith("image/")) {
-        response = await axios.post("https://jubilant-succotash-wq5r54pjggxcg7r9-5000.app.github.dev/detect_image", formData)
+        response = await axios.post("http://127.0.0.1:5000/detect_image", formData)
       } else if (file.type.startsWith("audio/")) {
-        response = await axios.post("https://jubilant-succotash-wq5r54pjggxcg7r9-5000.app.github.dev/detect_audio", formData)
+        response = await axios.post("http://127.0.0.1:5000/detect_audio", formData)
       } else if (file.type.startsWith("video/")) {
-        response = await axios.post("https://jubilant-succotash-wq5r54pjggxcg7r9-5000.app.github.dev/detect_video", formData)
+        response = await axios.post("http://127.0.0.1:5000/detect_video", formData)
       } else {
-        response = await axios.post("https://7t6qwzmb-5000.inc1.devtunnels.ms/detect", formData)
+        response = await axios.post("http://127.0.0.1:5000/detect", formData)
       }
       setResult(response.data)
     } catch (error) {
@@ -74,11 +74,15 @@ export default function DetectPage() {
       <header className={`fixed top-0 left-0 right-0 z-50 ${theme === 'dark' ? 'bg-black/50' : 'bg-white/50'} backdrop-blur-md transition-transform duration-300 ${showNavbar ? 'translate-y-0' : '-translate-y-full'}`}>
         <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
           <Link href="/">
+<<<<<<< HEAD
           <img 
           src={theme === 'dark' ? "/images/RG_dark.png" : "/images/RG_white.png"} 
           alt="roboguard logo" 
           className="h-8" 
           />
+=======
+            <img src="/images/Logo.png" alt="roboguard logo" className="h-8" />
+>>>>>>> 0f206ab2c02a6cba276d983b515b5d9e2a3c7c0b
           </Link>
           <div className="flex space-x-6 items-center">
             <Link href="/" className="text-lg font-medium hover:text-blue-400 transition-colors">Home</Link>
